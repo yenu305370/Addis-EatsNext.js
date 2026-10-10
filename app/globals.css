@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --brand-orange: #ea580c;
+  --brand-orange-dark: #c2410c;
+}
+
+@theme inline {
+  --font-sans: var(--font-manrope), system-ui, sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-brand-orange: var(--brand-orange);
+  --color-brand-orange-dark: var(--brand-orange-dark);
+}
+
+@layer base {
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+}
+
+.menu-search {
+  width: 100%;
+  border: 1px solid #ffedd5;
+  border-radius: 0.75rem;
+  background: #fff;
+  padding: 0.75rem 1rem 0.75rem 2.75rem;
+  color: var(--foreground);
+  font-size: 0.875rem;
+  font-weight: 500;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.05);
+  outline: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.menu-search:focus-visible {
+  border-color: var(--brand-orange);
+  box-shadow: 0 0 0 3px rgb(234 88 12 / 0.18);
+}
