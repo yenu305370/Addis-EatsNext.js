@@ -9,6 +9,23 @@ export const metadata = {
   description: 'View your Addis Eats order history and track active deliveries.',
 };
 
+function getOrderStatusBadgeStyle(status) {
+  switch (status) {
+    case 'PENDING':
+      return 'bg-amber-100 text-amber-800';
+    case 'PREPARING':
+      return 'bg-orange-100 text-orange-800';
+    case 'ON_THE_WAY':
+      return 'bg-sky-100 text-sky-800';
+    case 'DELIVERED':
+      return 'bg-emerald-100 text-emerald-800';
+    case 'CANCELLED':
+      return 'bg-rose-100 text-rose-800';
+    default:
+      return 'bg-slate-100 text-slate-700';
+  }
+}
+
 export default async function OrdersPage() {
   const session = await getSession();
   if (!session) {
@@ -64,15 +81,9 @@ export default async function OrdersPage() {
                     {new Date(order.createdAt).toLocaleString()}
                   </p>
                 </div>
-                <span className={`rounded-full px-3 py-1 text-xs font-bold ${
-                  order.status === 'CANCELLED'
-                    ? 'bg-rose-50 text-rose-800'
-                    : order.status === 'DELIVERED'
-                      ? 'bg-slate-100 text-slate-700'
-                      : 'bg-emerald-50 text-emerald-800'
-                }`}>
-                  {order.status.replaceAll('_', ' ')}
-                </span>
+               <span className={`rounded-full px-3 py-1 text-xs font-bold ${getOrderStatusBadgeStyle(order.status)}`}>
+  {order.status.replaceAll('_', ' ')}
+</span>
               </div>
 
               <ul className="mt-4 space-y-2 border-t border-slate-100 pt-4">

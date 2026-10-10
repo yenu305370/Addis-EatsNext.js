@@ -70,10 +70,16 @@ export default function SignInForm({ nextUrl, showDemoCredentials }) {
         </form>
 
         {showDemoCredentials && (
-          <p className="rounded-xl bg-orange-50 p-3 text-center text-xs leading-5 text-orange-900">
-            Demo customer: <strong>user@example.com</strong> · password:{' '}
-            <strong>password123</strong>
-          </p>
+          <div className="space-y-2 rounded-xl bg-orange-50 p-3 text-xs leading-5 text-orange-900">
+            <p>
+              Demo customer: <strong>user@example.com</strong> · password:{' '}
+              <strong>password123</strong>
+            </p>
+            <p>
+              Demo staff: <strong>staff@example.com</strong> · password:{' '}
+              <strong>password123</strong>
+            </p>
+          </div>
         )}
 
         <div className="border-t border-slate-100 pt-4 text-center text-xs text-slate-500">

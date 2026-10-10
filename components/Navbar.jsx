@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { logout } from '@/actions/auth';
 import { useCartStore } from '@/lib/cartStore';
 
 export default function Navbar({ session }) {
@@ -19,7 +20,8 @@ export default function Navbar({ session }) {
   const navLinks = [
     { name: 'Home', href: '/' },
     { name: 'Menu', href: '/menu' },
-    { name: 'My Orders', href: '/orders' },
+    { name: 'Orders', href: '/orders' },
+    { name: 'Cart', href: '/cart' },
     { name: 'Checkout', href: '/checkout' },
     ...(session?.role === 'staff' ? [{ name: 'Kitchen', href: '/kitchen' }] : []),
   ];
@@ -49,21 +51,21 @@ export default function Navbar({ session }) {
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-1 bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200/60">
+        <nav className="hidden lg:flex items-center gap-1 bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200/60">
           {navLinks.map((link) => {
             const active = isActive(link.href);
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`px-5 py-2 rounded-xl text-xs font-extrabold transition-all ${
+                className={`px-3 py-2 rounded-xl text-xs font-extrabold transition-all ${
                   active
                     ? 'bg-orange-600 text-white shadow-sm'
                     : 'text-slate-600 hover:text-orange-800 hover:bg-orange-50'
                 }`}
               >
                 {link.name}
-                {link.href === '/checkout' && (
+                {link.href === '/cart' && (
                   <span aria-label={`${cartCount} items in cart`} className="ml-1.5 rounded-full bg-white/20 px-1.5 py-0.5 text-[10px]">
                     🛒 {cartCount}
                   </span>
@@ -74,13 +76,19 @@ export default function Navbar({ session }) {
         </nav>
 
         {/* Account actions */}
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden lg:flex items-center gap-3">
           {session ? (
             <>
               <span className="max-w-36 truncate text-xs font-semibold text-slate-600">
                 Hi, {session.name}
               </span>
-              <form action="/signout" method="post">
+              <Link
+                href="/signin"
+                className="rounded-xl border border-orange-200 px-4 py-2.5 text-xs font-bold text-orange-800 transition-colors hover:bg-orange-50"
+              >
+                Sign in
+              </Link>
+              <form action={logout}>
                 <button
                   type="submit"
                   className="rounded-xl bg-slate-900 px-5 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-orange-600 active:scale-95"
@@ -102,7 +110,7 @@ export default function Navbar({ session }) {
         {/* Mobile Hamburger Toggle Button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 rounded-xl text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors"
+          className="lg:hidden p-2 rounded-xl text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors"
           aria-label="Toggle Navigation Menu"
         >
           {mobileMenuOpen ? (
@@ -115,7 +123,7 @@ export default function Navbar({ session }) {
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-b border-slate-200 p-6 space-y-4 shadow-xl">
+        <div className="lg:hidden bg-white border-b border-slate-200 p-6 space-y-4 shadow-xl">
           <nav className="flex flex-col space-y-2">
             {navLinks.map((link) => {
               const active = isActive(link.href);
@@ -131,7 +139,7 @@ export default function Navbar({ session }) {
                   }`}
                 >
                   {link.name}
-                  {link.href === '/checkout' && (
+                  {link.href === '/cart' && (
                     <span aria-label={`${cartCount} items in cart`} className="ml-2 rounded-full bg-white/20 px-2 py-0.5 text-[10px]">
                       🛒 {cartCount}
                     </span>
@@ -147,7 +155,14 @@ export default function Navbar({ session }) {
                 <p className="px-4 py-2 text-xs font-semibold text-slate-600">
                   Signed in as {session.name}
                 </p>
-                <form action="/signout" method="post">
+                <Link
+                  href="/signin"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full rounded-xl border border-orange-200 py-3 text-center text-xs font-bold text-orange-800 hover:bg-orange-50"
+                >
+                  Sign in
+                </Link>
+                <form action={logout}>
                   <button
                     type="submit"
                     className="w-full rounded-xl bg-slate-900 py-3 text-xs font-bold text-white"

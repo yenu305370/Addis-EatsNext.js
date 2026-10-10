@@ -77,7 +77,7 @@ export default function CheckoutForm({ customerName }) {
           </p>
           <div className="mt-5 grid gap-4">
             <label className="grid gap-1.5 text-sm font-semibold text-slate-700">
-              Delivery address
+              <span>Delivery address</span>
               <textarea
                 name="deliveryAddress"
                 required
@@ -89,8 +89,9 @@ export default function CheckoutForm({ customerName }) {
                 className="w-full resize-y rounded-xl border border-slate-200 px-4 py-3 font-normal outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
               />
             </label>
+
             <label className="grid gap-1.5 text-sm font-semibold text-slate-700">
-              Contact phone
+              <span>Contact phone</span>
               <input
                 type="tel"
                 name="phone"

@@ -1,83 +1,80 @@
-import { Manrope } from 'next/font/google';
-import { headers } from 'next/headers';
-import Navbar from '@/components/Navbar';
-import ToastProvider from '@/components/ToastProvider';
-import { getSession } from '@/lib/auth';
-import { siteUrl } from '@/lib/site';
-import './globals.css';
+import { Geist, Geist_Mono } from "next/font/google";
+import { siteUrl } from "@/lib/site";
+import { getSession } from "@/lib/auth";
+import Navbar from "@/components/Navbar";
+import ToastProvider from "@/components/ToastProvider";
+import "./globals.css";
 
-const manrope = Manrope({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-manrope',
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
 });
 
-const siteMetadata = {
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+export const metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
-    default: 'Addis Eats | Authentic Ethiopian Food Delivery',
-    template: '%s | Addis Eats',
+    default: "Addis Eats | Authentic Ethiopian Dining",
+    template: "%s | Addis Eats",
   },
   description:
-    'Discover authentic Ethiopian favorites, from slow-simmered Doro Wat to colorful fasting dishes. Order with Addis Eats and follow your delivery.',
+    "Authentic Ethiopian dining delivered fresh in Addis Ababa. Experience slow-simmered Doro Wat, colorful fasting favorites, and warm Ethiopian hospitality.",
+  applicationName: "Addis Eats",
+  keywords: [
+    "Addis Eats",
+    "Ethiopian Food",
+    "Addis Ababa",
+    "Doro Wat",
+    "Ethiopian Dining",
+    "Food Delivery",
+  ],
+  authors: [{ name: "Addis Eats Team" }],
+  creator: "Addis Eats",
   openGraph: {
-    title: 'Addis Eats | Authentic Ethiopian Food, Made for Sharing',
+    type: "website",
+    locale: "en_US",
+    url: siteUrl,
+    siteName: "Addis Eats",
+    title: "Addis Eats | Authentic Ethiopian Dining",
     description:
-      'Discover and order beloved Ethiopian dishes, prepared with care and delivered with the warmth of Ethiopian hospitality.',
-    url: '/',
-    siteName: 'Addis Eats',
-    images: [{
-      url: '/images/Special%20Doro%20Wat.jpg',
-      alt: 'Special Ethiopian Doro Wat served with injera',
-      width: 495,
-      height: 619,
-    }],
-    locale: 'en_US',
-    type: 'website',
+      "Authentic Ethiopian food, made for sharing. Slow-simmered Doro Wat to colorful fasting favorites, delivered fresh in Addis Ababa.",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Addis Eats - Authentic Ethiopian Dining Preview Banner",
+      },
+    ],
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'Addis Eats | Authentic Ethiopian Food, Made for Sharing',
+    card: "summary_large_image",
+    title: "Addis Eats | Authentic Ethiopian Dining",
     description:
-      'Discover and order Ethiopian classics, signature Doro Wat, and fasting favorites made for sharing.',
-    images: [{
-      url: '/images/Special%20Doro%20Wat.jpg',
-      alt: 'Special Ethiopian Doro Wat served with injera',
-    }],
+      "Authentic Ethiopian food, made for sharing. Delivered fresh in Addis Ababa.",
+    images: ["/og-image.jpg"],
   },
-};
-
-export async function generateMetadata() {
-  let resolvedSiteUrl = siteUrl;
-  if (
-    process.env.NODE_ENV !== 'production' &&
-    !process.env.NEXT_PUBLIC_SITE_URL &&
-    !process.env.VERCEL_URL
-  ) {
-    const host = (await headers()).get('host');
-    if (host) resolvedSiteUrl = `http://${host}`;
-  }
-
-  return {
-    ...siteMetadata,
-    metadataBase: new URL(resolvedSiteUrl),
-  };
-}
-
-export const viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  themeColor: '#f8fafc',
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default async function RootLayout({ children }) {
   const session = await getSession();
 
   return (
-    <html lang="en" className={manrope.variable}>
-      <body className="flex min-h-screen flex-col bg-slate-50 font-sans text-slate-900 antialiased">
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
         <ToastProvider>
           <Navbar session={session} />
-          <main className="flex-1">{children}</main>
+          {children}
         </ToastProvider>
       </body>
     </html>

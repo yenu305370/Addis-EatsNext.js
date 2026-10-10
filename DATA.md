@@ -31,3 +31,10 @@ The customer order-detail page polls `GET /api/orders/[id]` every five seconds f
 The JSON file is local application data, not a managed database or backup strategy. Before production, migrate orders to persistent shared storage, apply schema validation/migrations, and configure retention, access controls, and backups. Do not place the data directory in a publicly served path.
 ![alt text](image.png)
 ![alt text](image-1.png)
+![alt text](image-2.png) Home landing
+![alt text](image-3.png) menu landing
+![alt text](image-4.png) order page
+![alt text](image-5.png) cart page
+![alt text](image-6.png) chekout page
+
+![alt text](image-7.png)

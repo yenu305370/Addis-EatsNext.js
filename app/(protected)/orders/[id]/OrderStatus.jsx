@@ -5,6 +5,16 @@ import { useToast } from '@/components/ToastProvider';
 
 const STATUS_STEPS = ['PENDING', 'PREPARING', 'ON_THE_WAY', 'DELIVERED'];
 
+function getStatusBadgeStyle(currentStatus) {
+  if (currentStatus === 'CANCELLED') {
+    return 'border-rose-200 bg-rose-100 text-rose-800';
+  }
+  if (currentStatus === 'DELIVERED') {
+    return 'border-slate-200 bg-slate-100 text-slate-700';
+  }
+  return 'animate-status-pulse border-emerald-200 bg-emerald-100 text-emerald-800';
+}
+
 export default function OrderStatus({ initialStatus, orderId }) {
   const [status, setStatus] = useState(initialStatus);
   const [pollError, setPollError] = useState(false);
@@ -17,6 +27,7 @@ export default function OrderStatus({ initialStatus, orderId }) {
 
     let active = true;
     let interval;
+
     const pollStatus = async () => {
       try {
         const res = await fetch(`/api/orders/${orderId}`, {
@@ -43,8 +54,11 @@ export default function OrderStatus({ initialStatus, orderId }) {
         if (active) setPollError(true);
       }
     };
-    pollStatus();
-    interval = setInterval(pollStatus, 5000);
+
+    void pollStatus();
+    interval = setInterval(() => {
+      void pollStatus();
+    }, 5000);
 
     return () => {
       active = false;
@@ -55,57 +69,53 @@ export default function OrderStatus({ initialStatus, orderId }) {
   const currentStepIndex = STATUS_STEPS.indexOf(status);
 
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm mb-6">
-      <div className="flex justify-between items-center mb-6">
+    <div className="mb-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="mb-6 flex items-center justify-between">
         <h3 className="text-base font-bold text-slate-900">Live Order Status</h3>
         <span
           aria-live="polite"
-          className={`rounded-full border px-3 py-1 text-xs font-extrabold ${
-            status === 'CANCELLED'
-              ? 'border-rose-200 bg-rose-100 text-rose-800'
-              : status === 'DELIVERED'
-                ? 'border-slate-200 bg-slate-100 text-slate-700'
-                : 'animate-status-pulse border-emerald-200 bg-emerald-100 text-emerald-800'
-          }`}
+          className={`rounded-full border px-3 py-1 text-xs font-extrabold ${getStatusBadgeStyle(status)}`}
         >
           ● {status}
         </span>
       </div>
-      {status === 'CANCELLED' ? (
-        <p role="status" className="rounded-xl bg-rose-50 p-4 text-sm font-semibold text-rose-800">
+{status === 'CANCELLED' ? (
+        <output className="block rounded-xl bg-rose-50 p-4 text-sm font-semibold text-rose-800">
           This order has been cancelled.
-        </p>
+        </output>
       ) : (
         <>
-      {pollError && (
-        <p role="status" className="mb-4 text-xs font-medium text-amber-700">
-          Live updates are temporarily unavailable. Retrying automatically.
-        </p>
-      )}
+          {pollError && (
+            <output className="mb-4 block text-xs font-medium text-amber-700">
+              Live updates are temporarily unavailable. Retrying automatically.
+            </output>
+          )}
 
-      <div className="grid grid-cols-4 gap-2 text-center relative">
-        {STATUS_STEPS.map((step, idx) => {
-          const isCompleted = idx <= currentStepIndex;
-          return (
-            <div key={step} className="flex flex-col items-center">
-              <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs mb-2 transition-colors ${
-                  isCompleted
-                    ? 'bg-amber-500 text-white shadow-md'
-                    : 'bg-slate-100 text-slate-400 border border-slate-200'
-                }`}
-              >
-                {idx + 1}
-              </div>
-              <span className={`text-xs font-medium ${
-                isCompleted ? 'text-slate-900 font-bold' : 'text-slate-400'
-              }`}>
-              {step.replaceAll('_', ' ')}
-              </span>
-            </div>
-          );
-        })}
-      </div>
+          <div className="relative grid grid-cols-4 gap-2 text-center">
+            {STATUS_STEPS.map((step, idx) => {
+              const isCompleted = idx <= currentStepIndex;
+              return (
+                <div key={step} className="flex flex-col items-center">
+                  <div
+                    className={`mb-2 flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-colors ${
+                      isCompleted
+                        ? 'bg-amber-500 text-white shadow-md'
+                        : 'border border-slate-200 bg-slate-100 text-slate-400'
+                    }`}
+                  >
+                    {idx + 1}
+                  </div>
+                  <span
+                    className={`text-xs ${
+                      isCompleted ? 'font-bold text-slate-900' : 'font-medium text-slate-400'
+                    }`}
+                  >
+                    {step.replaceAll('_', ' ')}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
         </>
       )}
     </div>
