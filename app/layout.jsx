@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist } from "next/font/google";
 import { siteUrl } from "@/lib/site";
 import { getSession } from "@/lib/auth";
 import Navbar from "@/components/Navbar";
@@ -7,11 +7,6 @@ import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
@@ -42,21 +37,12 @@ export const metadata = {
     title: "Addis Eats | Authentic Ethiopian Dining",
     description:
       "Authentic Ethiopian food, made for sharing. Slow-simmered Doro Wat to colorful fasting favorites, delivered fresh in Addis Ababa.",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Addis Eats - Authentic Ethiopian Dining Preview Banner",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Addis Eats | Authentic Ethiopian Dining",
     description:
       "Authentic Ethiopian food, made for sharing. Delivered fresh in Addis Ababa.",
-    images: ["/og-image.jpg"],
   },
   robots: {
     index: true,
@@ -69,9 +55,7 @@ export default async function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} antialiased`}>
         <ToastProvider>
           <Navbar session={session} />
           {children}

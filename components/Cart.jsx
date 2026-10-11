@@ -8,7 +8,7 @@ export default function Cart({ items, onRemove, onCheckout }) {
   if (items.length === 0) {
     return (
       <div className="p-6 border rounded-2xl bg-white text-center shadow-sm">
-        <p className="text-slate-400 text-sm">Your order bag is currently empty.</p>
+        <p className="text-slate-400 text-sm">Your cart is currently empty.</p>
       </div>
     );
   }
@@ -40,7 +40,7 @@ export default function Cart({ items, onRemove, onCheckout }) {
       </div>
       <button
         onClick={onCheckout}
-        className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition-colors text-xs"
+        className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl transition-colors text-xs"
       >
         Proceed to Checkout
       </button>

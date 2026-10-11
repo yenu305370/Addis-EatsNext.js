@@ -34,7 +34,7 @@ const DishCard = memo(function DishCard({
     onAddToCart?.({ ...dish, quantity });
     if (onAddToCart) {
       notify(
-        `${quantity} ${quantity === 1 ? 'serving' : 'servings'} of ${dish.name} added to your bag.`
+        `${quantity} ${quantity === 1 ? 'serving' : 'servings'} of ${dish.name} added to your cart.`
       );
     }
     setQuantity(1);
@@ -176,7 +176,7 @@ const DishCard = memo(function DishCard({
               onClick={handleAdd}
               className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-orange-600 px-4 py-2 text-xs font-bold text-white shadow-xs transition-all hover:bg-orange-700 active:scale-95"
             >
-              <span>+ Add to Bag</span>
+              <span>+ Add to Cart</span>
             </button>
           </div>
         </div>

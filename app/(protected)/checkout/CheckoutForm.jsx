@@ -47,7 +47,7 @@ export default function CheckoutForm({ customerName }) {
   if (items.length === 0) {
     return (
       <div className="mt-8 rounded-3xl border border-dashed border-orange-200 bg-white p-10 text-center">
-        <p className="text-lg font-extrabold text-slate-900">Your bag is empty</p>
+        <p className="text-lg font-extrabold text-slate-900">Your cart is empty</p>
         <p className="mt-2 text-sm text-slate-600">
           Add a few Ethiopian favorites before you check out.
         </p>

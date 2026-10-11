@@ -17,34 +17,39 @@ const DEMO_CREDENTIALS = {
 };
 
 function getAccounts() {
-  const customerEmail = (
-    process.env.ADDIS_CUSTOMER_EMAIL || DEMO_CREDENTIALS.customer.email
-  ).trim().toLowerCase();
-  const customerPassword =
-    process.env.ADDIS_CUSTOMER_PASSWORD || DEMO_CREDENTIALS.customer.password;
+  const accounts = [];
+  const isDevelopment = process.env.NODE_ENV !== 'production';
+  const customerEmail = process.env.ADDIS_CUSTOMER_EMAIL ||
+    (isDevelopment ? DEMO_CREDENTIALS.customer.email : '');
+  const customerPassword = process.env.ADDIS_CUSTOMER_PASSWORD ||
+    (isDevelopment ? DEMO_CREDENTIALS.customer.password : '');
+  const staffEmail = process.env.ADDIS_STAFF_EMAIL ||
+    (isDevelopment ? DEMO_CREDENTIALS.staff.email : '');
+  const staffPassword = process.env.ADDIS_STAFF_PASSWORD ||
+    (isDevelopment ? DEMO_CREDENTIALS.staff.password : '');
 
-  const staffEmail = (
-    process.env.ADDIS_STAFF_EMAIL || DEMO_CREDENTIALS.staff.email
-  ).trim().toLowerCase();
-  const staffPassword =
-    process.env.ADDIS_STAFF_PASSWORD || DEMO_CREDENTIALS.staff.password;
-
-  return [
-    {
-      email: customerEmail,
+  if (customerEmail && customerPassword) {
+    accounts.push({
+      email: customerEmail.trim().toLowerCase(),
       password: customerPassword,
       id: 'usr_123',
       name: 'Demo Customer',
       role: 'customer',
-    },
-    {
-      email: staffEmail,
+    });
+  }
+
+  if (staffEmail && staffPassword) {
+    accounts.push({
+      email: staffEmail.trim().toLowerCase(),
       password: staffPassword,
       id: 'usr_456',
       name: 'Demo Staff',
       role: 'staff',
-    },
-    // Also keep the literal demo accounts active as fallbacks even if custom envs are set
+    });
+  }
+
+  // Keep the sample accounts available for the educational demo deployment.
+  accounts.push(
     {
       email: DEMO_CREDENTIALS.customer.email,
       password: DEMO_CREDENTIALS.customer.password,
@@ -58,8 +63,10 @@ function getAccounts() {
       id: 'usr_456',
       name: 'Demo Staff',
       role: 'staff',
-    },
-  ];
+    }
+  );
+
+  return accounts;
 }
 function safeRedirectPath(value) {
   if (typeof value !== 'string') return '/';

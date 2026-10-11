@@ -47,7 +47,7 @@ export default async function DishDetailPage({ params }) {
           </div>
           <div>
             <p className="text-2xl font-black text-slate-900 mb-4">{formatETB(dish.price)}</p>
-            <button className="w-full bg-slate-900 hover:bg-amber-500 text-white font-bold py-3 rounded-xl transition-all text-xs">
+            <button className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl transition-all text-xs">
               Add to Order
             </button>
           </div>

@@ -2,8 +2,8 @@ import HeroBanner from '@/components/HeroBanner';
 
 export default function HomePage() {
   return (
-    <div className="mx-auto max-w-7xl px-4 pb-16 pt-6 md:px-8 md:pb-20 md:pt-8">
+    <main className="mx-auto max-w-[88rem] px-4 pb-16 pt-5 sm:px-6 md:px-8 md:pb-24 md:pt-7">
       <HeroBanner />
-    </div>
+    </main>
   );
 }

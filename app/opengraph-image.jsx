@@ -1,6 +1,7 @@
 import { ImageResponse } from 'next/og';
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
-export const runtime = 'edge';
 export const alt = 'Addis Eats | Authentic Ethiopian Dining';
 export const size = {
   width: 1200,
@@ -9,45 +10,28 @@ export const size = {
 export const contentType = 'image/png';
 
 export default function Image() {
-  return new ImageResponse(
+  return readFile(join(process.cwd(), 'public', 'images', 'Special Doro Wat.jpg')).then((photo) =>
+    new ImageResponse(
     (
-      <div
-        style={{
-          height: '100%',
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: '#111827',
-          color: '#ffffff',
-          fontFamily: 'sans-serif',
-          border: '16px solid #f59e0b',
-        }}
-      >
-        <div
-          style={{
-            fontSize: 72,
-            fontWeight: 900,
-            color: '#f59e0b',
-            letterSpacing: '2px',
-          }}
-        >
-          ADDIS EATS
+      <div style={{ display: 'flex', width: '100%', height: '100%', background: '#21130f', color: '#fff' }}>
+        <div style={{ display: 'flex', width: '54%', height: '100%', overflow: 'hidden' }}>
+          <img
+            src={`data:image/jpeg;base64,${photo.toString('base64')}`}
+            alt="Ethiopian Doro Wat served with injera"
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
         </div>
-        <div
-          style={{
-            fontSize: 28,
-            marginTop: 16,
-            color: '#d1d5db',
-          }}
-        >
-          Authentic Ethiopian Dining Experience
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '46%', padding: '52px', borderLeft: '8px solid #f59e0b' }}>
+          <div style={{ display: 'flex', fontSize: 20, fontWeight: 800, letterSpacing: '5px', color: '#fbbf24', marginBottom: 24 }}>ADDIS EATS</div>
+          <div style={{ display: 'flex', fontSize: 54, lineHeight: 1.05, fontWeight: 900 }}>A taste of tradition</div>
+          <div style={{ display: 'flex', fontSize: 27, lineHeight: 1.35, color: '#f3e8df', marginTop: 22 }}>Doro Wat, simmered with care.</div>
+          <div style={{ display: 'flex', fontSize: 20, color: '#fbbf24', marginTop: 36 }}>AUTHENTIC ETHIOPIAN DINING</div>
         </div>
       </div>
     ),
     {
       ...size,
     }
+    )
   );
 }

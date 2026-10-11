@@ -6,181 +6,92 @@ import { usePathname } from 'next/navigation';
 import { logout } from '@/actions/auth';
 import { useCartStore } from '@/lib/cartStore';
 
+const baseLinks = [
+  { name: 'Home', href: '/' },
+  { name: 'Menu', href: '/menu' },
+  { name: 'Track order', href: '/track' },
+  { name: 'My orders', href: '/orders' },
+];
+
 export default function Navbar({ session }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [cartHydrated, setCartHydrated] = useState(false);
   const pathname = usePathname();
   const storedCartCount = useCartStore((state) => state.getTotalCount());
   const cartCount = cartHydrated ? storedCartCount : 0;
-
-  useEffect(() => {
-    setCartHydrated(true);
-  }, []);
-
   const navLinks = [
-    { name: 'Home', href: '/' },
-    { name: 'Menu', href: '/menu' },
-    { name: 'Orders', href: '/orders' },
-    { name: 'Cart', href: '/cart' },
-    { name: 'Checkout', href: '/checkout' },
+    ...baseLinks,
     ...(session?.role === 'staff' ? [{ name: 'Kitchen', href: '/kitchen' }] : []),
   ];
 
-  // Matches exact path for root '/', and prefix for nested routes like '/orders/1'
-  const isActive = (path) => {
-    if (path === '/') return pathname === '/';
-    return pathname.startsWith(path);
-  };
+  useEffect(() => setCartHydrated(true), []);
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
+
+  const isActive = (href) => href === '/' ? pathname === '/' : pathname.startsWith(href);
 
   return (
-    <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
-      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-        {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-2 group">
-          <span className="w-10 h-10 rounded-xl bg-orange-600 text-white font-black text-xl flex items-center justify-center shadow-md shadow-orange-900/20 group-hover:scale-105 transition-transform">
-            AE
+    <header className="sticky top-0 z-40 border-b border-[#eadfd1]/80 bg-[#fbf8f2]/95 backdrop-blur-xl">
+      <div className="mx-auto flex h-[4.75rem] max-w-[88rem] items-center justify-between px-4 sm:px-6 md:px-8">
+        <Link href="/" aria-label="Addis Eats home" className="group flex items-center gap-3">
+          <span className="flex h-10 w-10 items-center justify-center rounded-[0.9rem] bg-orange-600 font-sans text-lg font-black tracking-tight text-white shadow-sm transition group-hover:-rotate-3 group-hover:bg-orange-700">A<span className="text-orange-100">E</span></span>
+          <span className="flex flex-col">
+            <span className="text-sm font-black tracking-[0.15em] text-orange-700">ADDIS EATS</span>
+            <span className="mt-0.5 text-[9px] font-bold uppercase tracking-[0.2em] text-stone-500">An Ethiopian table</span>
           </span>
-          <div className="flex flex-col">
-            <span className="font-black text-orange-800 text-lg tracking-tight group-hover:text-orange-600 transition-colors">
-              ADDIS EATS
-            </span>
-            <span className="text-[10px] font-bold text-orange-700 uppercase tracking-widest -mt-1">
-              Luxury Dining
-            </span>
-          </div>
         </Link>
 
-        {/* Desktop Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-1 bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200/60">
-          {navLinks.map((link) => {
-            const active = isActive(link.href);
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`px-3 py-2 rounded-xl text-xs font-extrabold transition-all ${
-                  active
-                    ? 'bg-orange-600 text-white shadow-sm'
-                    : 'text-slate-600 hover:text-orange-800 hover:bg-orange-50'
-                }`}
-              >
-                {link.name}
-                {link.href === '/cart' && (
-                  <span aria-label={`${cartCount} items in cart`} className="ml-1.5 rounded-full bg-white/20 px-1.5 py-0.5 text-[10px]">
-                    🛒 {cartCount}
-                  </span>
-                )}
-              </Link>
-            );
-          })}
+        <nav aria-label="Main navigation" className="hidden items-center gap-1 lg:flex">
+          {navLinks.map((link) => (
+            <Link key={link.href} href={link.href} aria-current={isActive(link.href) ? 'page' : undefined} className={`rounded-full px-4 py-2.5 text-xs font-bold transition ${isActive(link.href) ? 'bg-[#efe5d8] text-[#321c13]' : 'text-stone-600 hover:bg-[#f3ede4] hover:text-[#321c13]'}`}>
+              {link.name}
+            </Link>
+          ))}
         </nav>
 
-        {/* Account actions */}
-        <div className="hidden lg:flex items-center gap-3">
+        <div className="hidden items-center gap-3 lg:flex">
+          {session && <span className="max-w-32 truncate text-xs font-semibold text-stone-500">Hi, {session.name.split(' ')[0]}</span>}
           {session ? (
-            <>
-              <span className="max-w-36 truncate text-xs font-semibold text-slate-600">
-                Hi, {session.name}
-              </span>
-              <Link
-                href="/signin"
-                className="rounded-xl border border-orange-200 px-4 py-2.5 text-xs font-bold text-orange-800 transition-colors hover:bg-orange-50"
-              >
-                Sign in
-              </Link>
-              <form action={logout}>
-                <button
-                  type="submit"
-                  className="rounded-xl bg-slate-900 px-5 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-orange-600 active:scale-95"
-                >
-                  Sign out
-                </button>
-              </form>
-            </>
+            <form action={logout}>
+              <button type="submit" className="rounded-full px-3 py-2 text-xs font-bold text-stone-500 transition hover:text-orange-800">Sign out</button>
+            </form>
           ) : (
-            <Link
-              href="/signin"
-              className="rounded-xl bg-slate-900 px-5 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-orange-600 active:scale-95"
-            >
-              Sign in
-            </Link>
+            <Link href="/signin" className="rounded-full px-3 py-2 text-xs font-bold text-stone-600 transition hover:text-orange-800">Sign in</Link>
           )}
+          <Link href="/cart" aria-label={`Cart, ${cartCount} items`} className="group inline-flex items-center gap-2 rounded-full bg-orange-600 px-5 py-3 text-xs font-extrabold text-white shadow-sm transition hover:bg-orange-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-700">
+            <span>Cart</span><span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-white/15 px-1.5 text-[10px]">{cartCount}</span>
+          </Link>
         </div>
 
-        {/* Mobile Hamburger Toggle Button */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="lg:hidden p-2 rounded-xl text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors"
-          aria-label="Toggle Navigation Menu"
-        >
-          {mobileMenuOpen ? (
-            <span className="font-bold text-lg leading-none">✕</span>
-          ) : (
-            <span className="font-bold text-lg leading-none">☰</span>
-          )}
-        </button>
+        <div className="flex items-center gap-2 lg:hidden">
+          <Link href="/cart" aria-label={`Cart, ${cartCount} items`} className="inline-flex h-10 items-center gap-2 rounded-full bg-orange-600 px-3 text-xs font-bold text-white transition hover:bg-orange-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-700">
+            Cart <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-white/15 px-1">{cartCount}</span>
+          </Link>
+          <button type="button" onClick={() => setMobileMenuOpen((open) => !open)} aria-expanded={mobileMenuOpen} aria-controls="mobile-navigation" aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'} className="flex h-10 w-10 items-center justify-center rounded-full border border-[#e8dccd] text-lg text-[#321c13] transition hover:bg-[#f2e9dd]">
+            {mobileMenuOpen ? '×' : '☰'}
+          </button>
+        </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-white border-b border-slate-200 p-6 space-y-4 shadow-xl">
-          <nav className="flex flex-col space-y-2">
-            {navLinks.map((link) => {
-              const active = isActive(link.href);
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`px-4 py-3 rounded-xl text-sm font-bold transition-colors ${
-                    active
-                      ? 'bg-orange-600 text-white'
-                      : 'text-slate-700 hover:bg-orange-50 hover:text-orange-800'
-                  }`}
-                >
-                  {link.name}
-                  {link.href === '/cart' && (
-                    <span aria-label={`${cartCount} items in cart`} className="ml-2 rounded-full bg-white/20 px-2 py-0.5 text-[10px]">
-                      🛒 {cartCount}
-                    </span>
-                  )}
-                </Link>
-              );
-            })}
-          </nav>
-
-          <div className="flex flex-col gap-2 border-t border-slate-100 pt-4">
-            {session ? (
-              <>
-                <p className="px-4 py-2 text-xs font-semibold text-slate-600">
-                  Signed in as {session.name}
-                </p>
-                <Link
-                  href="/signin"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full rounded-xl border border-orange-200 py-3 text-center text-xs font-bold text-orange-800 hover:bg-orange-50"
-                >
-                  Sign in
-                </Link>
-                <form action={logout}>
-                  <button
-                    type="submit"
-                    className="w-full rounded-xl bg-slate-900 py-3 text-xs font-bold text-white"
-                  >
-                    Sign out
-                  </button>
-                </form>
-              </>
-            ) : (
-              <Link
-                href="/signin"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full rounded-xl bg-slate-900 py-3 text-center text-xs font-bold text-white"
-              >
-                Sign in
+        <div id="mobile-navigation" className="border-t border-[#eadfd1] bg-[#fbf8f2] px-4 pb-5 pt-3 shadow-xl lg:hidden sm:px-6">
+          <nav aria-label="Mobile navigation" className="mx-auto flex max-w-[88rem] flex-col gap-1">
+            {navLinks.map((link) => (
+              <Link key={link.href} href={link.href} aria-current={isActive(link.href) ? 'page' : undefined} className={`rounded-xl px-4 py-3 text-sm font-bold transition ${isActive(link.href) ? 'bg-[#efe5d8] text-[#321c13]' : 'text-stone-600 hover:bg-[#f3ede4]'}`}>
+                {link.name}
               </Link>
+            ))}
+            {session ? (
+              <div className="mt-2 flex items-center justify-between border-t border-[#eadfd1] px-4 pt-4">
+                <span className="text-xs font-semibold text-stone-500">Signed in as {session.name}</span>
+                <form action={logout}><button type="submit" className="text-xs font-bold text-orange-800">Sign out</button></form>
+              </div>
+            ) : (
+              <Link href="/signin" className="mt-2 rounded-xl border border-[#eadfd1] px-4 py-3 text-sm font-bold text-[#321c13]">Sign in</Link>
             )}
-          </div>
+          </nav>
         </div>
       )}
     </header>

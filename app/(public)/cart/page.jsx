@@ -39,7 +39,7 @@ export default function CartPage() {
         <p className="text-xs font-black uppercase tracking-[0.2em] text-orange-700">
           Addis Eats · Your selection
         </p>
-        <h1 className="mt-2 text-3xl font-black text-slate-900">Your Cart</h1>
+        <h1 className="mt-2 text-3xl font-black text-slate-900">Cart</h1>
         <p className="mt-2 text-sm text-slate-600">
           Review your dishes and adjust quantities before checkout.
         </p>
