@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import HeroShowcase from './HeroShowcase';
+import { getDishSlug } from '@/lib/data';
 
 const featuredDishes = [
   {
@@ -57,7 +58,7 @@ export default function HeroBanner() {
 
         <div className="grid gap-5 md:grid-cols-3">
           {featuredDishes.map((dish) => (
-            <Link key={dish.id} href={`/menu/${dish.id}`} className="dish-feature group block overflow-hidden rounded-[1.5rem] border border-[#eee5d9] bg-white transition duration-300 hover:-translate-y-1 hover:border-orange-200 hover:shadow-[0_20px_55px_rgba(75,45,25,0.12)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-700">
+            <Link key={dish.id} href={`/menu/${getDishSlug(dish.name)}`} className="dish-feature group block overflow-hidden rounded-[1.5rem] border border-[#eee5d9] bg-white transition duration-300 hover:-translate-y-1 hover:border-orange-200 hover:shadow-[0_20px_55px_rgba(75,45,25,0.12)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-700">
               <div className="relative aspect-[1.23] overflow-hidden bg-[#eee2d1]">
                 <Image src={dish.image} alt={dish.alt} fill sizes="(max-width: 767px) 100vw, 33vw" className="object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
                 <span className="absolute left-4 top-4 rounded-full border border-white/40 bg-[#21130f]/65 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.17em] text-white backdrop-blur">{dish.category}</span>

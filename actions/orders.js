@@ -1,6 +1,6 @@
 'use server';
 
-import { requireAuth } from '@/lib/auth';
+import { requireAuth, requireRole } from '@/lib/auth';
 import { dishes } from '@/lib/data';
 import { revalidatePath } from 'next/cache';
 import { randomUUID } from 'node:crypto';
@@ -115,10 +115,7 @@ export async function cancelOrder(orderId) {
 }
 
 export async function advanceOrderStatus(orderId) {
-  const session = await requireAuth();
-  if (session.role !== 'staff') {
-    return { success: false, error: 'Staff access is required.' };
-  }
+  await requireRole('staff');
 
   if (typeof orderId !== 'string' || !orderId) {
     return { success: false, error: 'Invalid order ID.' };

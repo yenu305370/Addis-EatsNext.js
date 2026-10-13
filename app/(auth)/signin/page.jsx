@@ -8,8 +8,8 @@ export default async function SignInPage({ searchParams }) {
     <SignInForm
       nextUrl={next}
       showDemoCredentials={process.env.NODE_ENV !== 'production'}
-      demoCustomerEmail={process.env.ADDIS_CUSTOMER_EMAIL}
-      demoStaffEmail={process.env.ADDIS_STAFF_EMAIL}
+      demoCustomerEmail={process.env.ADDIS_CUSTOMER_EMAIL || 'user@example.com'}
+      demoCustomerPassword={process.env.ADDIS_CUSTOMER_PASSWORD || 'password123'}
     />
   );
 }

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import FavoriteButton from '@/components/FavoriteButton';
 import { useToast } from '@/components/ToastProvider';
+import { getDishSlug } from '@/lib/data';
 
 const DishCard = memo(function DishCard({
   dish = {
@@ -46,7 +47,7 @@ const DishCard = memo(function DishCard({
       <div className="relative aspect-4/3 w-full overflow-hidden rounded-[1.5rem] border-[6px] border-[#fff8ec] bg-amber-50 ring-1 ring-amber-200 shadow-[0_8px_22px_rgba(120,53,15,0.12)]">
         {dish.imageUrl ? (
           <Link
-            href={`/menu/${dish.id}`}
+            href={`/menu/${getDishSlug(dish.name)}`}
             aria-label={`View ${dish.name} details`}
             className="absolute inset-0"
             prefetch={false}
@@ -99,7 +100,7 @@ const DishCard = memo(function DishCard({
             <div>
               <h3 className="text-base font-extrabold text-slate-900 transition-colors group-hover:text-orange-700">
                 <Link
-                  href={`/menu/${dish.id}`}
+                  href={`/menu/${getDishSlug(dish.name)}`}
                   prefetch={false}
                   className="focus-visible:outline-2 focus-visible:outline-orange-600"
                 >

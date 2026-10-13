@@ -14,7 +14,7 @@ The site uses Geist through `next/font/google` in `app/layout.jsx`. Next.js serv
 
 ## Metadata and shared links
 
-The root layout provides Open Graph and Twitter card metadata and uses the local Doro Wat photo for the share image. In production, configure `NEXT_PUBLIC_SITE_URL` as the public HTTPS origin so canonical and social image URLs are absolute and correct. Development metadata derives its host from the incoming request.
+The root layout provides Open Graph and Twitter card metadata and uses the local `public/images/ethiopian-doro-wat.jpg` photo for the share image. In production, configure `NEXT_PUBLIC_SITE_URL` as the public HTTPS origin so canonical and social image URLs are absolute and correct.
 
 Private order-detail pages are marked `noindex`; personalized order API responses use `Cache-Control: private, no-store`.
 

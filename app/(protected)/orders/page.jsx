@@ -76,7 +76,10 @@ export default async function OrdersPage() {
             >
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div>
-                  <p className="font-extrabold text-slate-900">Order #{order.id}</p>
+                  <p className="font-extrabold text-slate-900">
+                    Order #{order.id} <span className="font-medium text-slate-400">·</span>{' '}
+                    <span className="font-semibold">{order.customerName}</span>
+                  </p>
                   <p className="mt-1 text-xs text-slate-500">
                     {new Date(order.createdAt).toLocaleString()}
                   </p>

@@ -48,24 +48,6 @@ function getAccounts() {
     });
   }
 
-  // Keep the sample accounts available for the educational demo deployment.
-  accounts.push(
-    {
-      email: DEMO_CREDENTIALS.customer.email,
-      password: DEMO_CREDENTIALS.customer.password,
-      id: 'usr_123',
-      name: 'Demo Customer',
-      role: 'customer',
-    },
-    {
-      email: DEMO_CREDENTIALS.staff.email,
-      password: DEMO_CREDENTIALS.staff.password,
-      id: 'usr_456',
-      name: 'Demo Staff',
-      role: 'staff',
-    }
-  );
-
   return accounts;
 }
 function safeRedirectPath(value) {

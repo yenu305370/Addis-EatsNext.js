@@ -6,8 +6,20 @@ import { login } from '@/actions/auth';
 
 const initialState = { error: '' };
 
-export default function SignInForm({ nextUrl, showDemoCredentials }) {
+export default function SignInForm({
+  nextUrl,
+  showDemoCredentials,
+  demoCustomerEmail,
+  demoCustomerPassword,
+}) {
   const [state, formAction, pending] = useActionState(login, initialState);
+
+  function fillDemoAccount() {
+    const form = document.getElementById('signin-form');
+    if (!form) return;
+    form.elements.email.value = demoCustomerEmail;
+    form.elements.password.value = demoCustomerPassword;
+  }
 
   return (
     <main className="flex min-h-[calc(100vh-5rem)] items-center justify-center bg-orange-50/40 p-6">
@@ -30,7 +42,7 @@ export default function SignInForm({ nextUrl, showDemoCredentials }) {
           </p>
         )}
 
-        <form action={formAction} className="space-y-4">
+        <form id="signin-form" action={formAction} className="space-y-4">
           <input type="hidden" name="next" value={nextUrl} />
           <div className="space-y-1">
             <label htmlFor="email" className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
@@ -71,9 +83,16 @@ export default function SignInForm({ nextUrl, showDemoCredentials }) {
 
         {showDemoCredentials && (
           <div className="space-y-2 rounded-xl bg-orange-50 p-3 text-xs leading-5 text-orange-900">
+            <button
+              type="button"
+              onClick={fillDemoAccount}
+              className="w-full rounded-lg border border-orange-200 bg-white px-3 py-2 text-xs font-extrabold text-orange-800 transition-colors hover:bg-orange-100 focus:outline-none focus:ring-2 focus:ring-orange-500/40"
+            >
+              Fill Demo Account
+            </button>
             <p>
-              Demo customer: <strong>user@example.com</strong> · password:{' '}
-              <strong>password123</strong>
+              Demo customer: <strong>{demoCustomerEmail}</strong> · password:{' '}
+              <strong>{demoCustomerPassword}</strong>
             </p>
             <p>
               Demo staff: <strong>staff@example.com</strong> · password:{' '}

@@ -1,10 +1,11 @@
 'use client';
 
-import { useActionState, useEffect, useState } from 'react';
+import { useActionState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { placeOrder } from '@/actions/orders';
 import { useCartStore } from '@/lib/cartStore';
+import { useHydrated } from '@/lib/hooks/useHydrated';
 
 const initialState = { error: '', orderId: '' };
 
@@ -15,7 +16,7 @@ function formatPrice(amount) {
 export default function CheckoutForm({ customerName }) {
   const router = useRouter();
   const [state, formAction, pending] = useActionState(placeOrder, initialState);
-  const [hydrated, setHydrated] = useState(false);
+  const hydrated = useHydrated();
   const items = useCartStore((cart) => cart.items);
   const updateQuantity = useCartStore((cart) => cart.updateQuantity);
   const removeItem = useCartStore((cart) => cart.removeItem);
@@ -24,10 +25,6 @@ export default function CheckoutForm({ customerName }) {
     (sum, item) => sum + item.price * item.quantity,
     0
   );
-
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
 
   useEffect(() => {
     if (!state.orderId) return;

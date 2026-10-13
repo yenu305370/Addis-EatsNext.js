@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { logout } from '@/actions/auth';
 import { useCartStore } from '@/lib/cartStore';
+import { useHydrated } from '@/lib/hooks/useHydrated';
 
 const baseLinks = [
   { name: 'Home', href: '/' },
@@ -15,7 +16,7 @@ const baseLinks = [
 
 export default function Navbar({ session }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [cartHydrated, setCartHydrated] = useState(false);
+  const cartHydrated = useHydrated();
   const pathname = usePathname();
   const storedCartCount = useCartStore((state) => state.getTotalCount());
   const cartCount = cartHydrated ? storedCartCount : 0;
@@ -23,12 +24,6 @@ export default function Navbar({ session }) {
     ...baseLinks,
     ...(session?.role === 'staff' ? [{ name: 'Kitchen', href: '/kitchen' }] : []),
   ];
-
-  useEffect(() => setCartHydrated(true), []);
-
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [pathname]);
 
   const isActive = (href) => href === '/' ? pathname === '/' : pathname.startsWith(href);
 
@@ -79,7 +74,7 @@ export default function Navbar({ session }) {
         <div id="mobile-navigation" className="border-t border-[#eadfd1] bg-[#fbf8f2] px-4 pb-5 pt-3 shadow-xl lg:hidden sm:px-6">
           <nav aria-label="Mobile navigation" className="mx-auto flex max-w-[88rem] flex-col gap-1">
             {navLinks.map((link) => (
-              <Link key={link.href} href={link.href} aria-current={isActive(link.href) ? 'page' : undefined} className={`rounded-xl px-4 py-3 text-sm font-bold transition ${isActive(link.href) ? 'bg-[#efe5d8] text-[#321c13]' : 'text-stone-600 hover:bg-[#f3ede4]'}`}>
+              <Link key={link.href} href={link.href} onClick={() => setMobileMenuOpen(false)} aria-current={isActive(link.href) ? 'page' : undefined} className={`rounded-xl px-4 py-3 text-sm font-bold transition ${isActive(link.href) ? 'bg-[#efe5d8] text-[#321c13]' : 'text-stone-600 hover:bg-[#f3ede4]'}`}>
                 {link.name}
               </Link>
             ))}

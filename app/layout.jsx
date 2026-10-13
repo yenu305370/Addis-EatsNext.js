@@ -27,8 +27,8 @@ export const metadata = {
     "Ethiopian Dining",
     "Food Delivery",
   ],
-  authors: [{ name: "Addis Eats Team" }],
-  creator: "Addis Eats",
+  authors: [{ name: "Yenenesh" }],
+  creator: "Yenenesh",
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -37,12 +37,21 @@ export const metadata = {
     title: "Addis Eats | Authentic Ethiopian Dining",
     description:
       "Authentic Ethiopian food, made for sharing. Slow-simmered Doro Wat to colorful fasting favorites, delivered fresh in Addis Ababa.",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Addis Eats | Authentic Ethiopian Dining",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Addis Eats | Authentic Ethiopian Dining",
     description:
       "Authentic Ethiopian food, made for sharing. Delivered fresh in Addis Ababa.",
+    images: ["/opengraph-image"],
   },
   robots: {
     index: true,

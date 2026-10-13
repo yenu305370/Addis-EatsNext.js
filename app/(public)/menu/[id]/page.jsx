@@ -1,24 +1,45 @@
-import { dishes } from '@/lib/data';
+import { dishes, getDishSlug } from '@/lib/data';
 import JsonLd from '@/components/JsonLd';
 import FavoriteButton from '@/components/FavoriteButton';
 import Image from 'next/image';
 import { formatETB } from '@/lib/formatters';
 import { notFound } from 'next/navigation';
+import { siteUrl } from '@/lib/site';
 
 export async function generateMetadata({ params }) {
-  const { id } = await params;
-  const dish = dishes.find((d) => d.id === id);
+  const { id: slug } = await params;
+  const dish = dishes.find((d) => getDishSlug(d.name) === slug);
   if (!dish) return { title: 'Dish Not Found' };
 
   return {
     title: `${dish.name} | Addis Eats`,
     description: dish.description,
+    openGraph: {
+      type: 'website',
+      url: `${siteUrl}/menu/${slug}`,
+      siteName: 'Addis Eats',
+      locale: 'en_US',
+      title: `${dish.name} | Addis Eats`,
+      description: dish.description,
+      images: [
+        {
+          url: dish.imageUrl,
+          alt: dish.name,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${dish.name} | Addis Eats`,
+      description: dish.description,
+      images: [dish.imageUrl],
+    },
   };
 }
 
 export default async function DishDetailPage({ params }) {
-  const { id } = await params;
-  const dish = dishes.find((d) => d.id === id);
+  const { id: slug } = await params;
+  const dish = dishes.find((d) => getDishSlug(d.name) === slug);
 
   if (!dish) notFound();
 

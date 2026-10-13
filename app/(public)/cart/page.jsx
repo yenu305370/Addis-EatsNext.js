@@ -1,15 +1,15 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useCartStore } from '@/lib/cartStore';
+import { useHydrated } from '@/lib/hooks/useHydrated';
 
 function formatPrice(amount) {
   return `${amount.toLocaleString()} ETB`;
 }
 
 export default function CartPage() {
-  const [hydrated, setHydrated] = useState(false);
+  const hydrated = useHydrated();
   const items = useCartStore((cart) => cart.items);
   const updateQuantity = useCartStore((cart) => cart.updateQuantity);
   const removeItem = useCartStore((cart) => cart.removeItem);
@@ -17,10 +17,6 @@ export default function CartPage() {
     (sum, item) => sum + item.price * item.quantity,
     0
   );
-
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
 
   if (!hydrated) {
     return (
